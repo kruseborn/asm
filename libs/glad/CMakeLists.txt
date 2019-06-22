@@ -1,0 +1,12 @@
+mg_cc_library(
+	NAME
+		glad
+	TYPE
+		STATIC
+	SRCS
+		"glad/glad.h"
+		"src/glad.c"
+		"KHR/khrplatform.h"
+	COPTS
+		${CPP_FLAGS}
+)

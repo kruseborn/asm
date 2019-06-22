@@ -1,3 +1,0 @@
-﻿  Assembling main.asm...
-legacy_stdio_wide_specifiers.lib(legacy_stdio_wide_specifiers.obj) : warning LNK4210: .CRT section exists; there may be unhandled static initializers or terminators
-  Assembly.vcxproj -> C:\git\asm\Assembly\x64\Debug\Assembly.exe

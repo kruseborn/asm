@@ -1,0 +1,13 @@
+mg_cc_executable(
+    NAME
+		assembly
+    SRCS
+		"main.cpp"
+		"linmath.h"
+		"game.asm"
+    COPTS
+        ${CPP_FLAGS}
+    DEPS
+        glfw
+      glad
+)

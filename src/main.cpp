@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <cmath>
 
+
 extern "C" float printWorld(float *x, float *y, int dir);
 
 static struct {
@@ -86,6 +87,9 @@ int main(void) {
 
   float x = 250.0f;
   float y = 200.0f;
+
+  //Bullets bullets = {};
+  //bullets.count = 20;
 
   while (!glfwWindowShouldClose(window)) {
     float ratio;

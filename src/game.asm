@@ -2,11 +2,12 @@ extern printf: PROC
 extern sinf: PROC
 extern cosf: PROC
 
-;Bullets struct
-	;x dd 20 dup (?)
-	;y dd 20 dup (?)
-	;count dd 20
-;Bullets ends
+Bullets struct
+	x dd 2 dup (0)
+	y dd 2 dup (0)
+	angles dd 2 dup (0)
+	count dd (0)
+Bullets ends
 
 .data
 msg db 'hello world fucker', 0Ah, 00
@@ -153,13 +154,40 @@ shootBullets proc
 	mov rbp, rsp
 	sub rsp, 40
 
-	cmp r8, 4
-	jne Finish
+ 	cmp [r9].Bullets.count, 5
+	je Finish
+	add [r9].Bullets.count, 1
+	mov eax, [r9].Bullets.count
+	sub eax, 1
 
 	movss xmm0, DWORD PTR[angle]
+	lea r12, [r9].Bullets.angles
+	movss DWORD PTR[r12 + rax*4], xmm0
+
+	movss xmm0, DWORD PTR[rcx]
+	lea r12, [r9].Bullets.x
+	movss DWORD PTR[r12 + rax*4], xmm0
+
+	movss xmm0, DWORD PTR[rdx]
+	lea r12, [r9].Bullets.y
+	movss DWORD PTR[r12 + rax*4], xmm0
+Finish:
+	mov rsp, rbp
+	pop rbp
+	ret
+shootBullets endP
+
+moveBullets proc
+	push rbp
+	mov rbp, rsp
+	sub rsp, 40
+
+	mov eax, [r9].Bullets.count
+LOOPING:
+	movss xmm0, [r9].Bullets.angles
 	call cosf
 	movss xmm1, xmm0
-	movss xmm0, DWORD PTR[angle]
+	movss xmm0, [r9].Bullets.angles
 	call sinf
 	movss xmm2, xmm0
 
@@ -167,20 +195,24 @@ shootBullets proc
 	movss xmm4, DWORD PTR[rdx]
 	movss xmm2, DWORD PTR[angle] ; return value
 
-
+	dec eax
+	jnz LOOPING
+FINISH:
 	mov rsp, rbp
 	pop rbp
-ret
-
-Finish:
 	ret
-shootBullets endP
+moveBullets endp
 
 printWorld proc
 	sub rsp, 40
-	call updatePlayer
 
-;	call shootBullets
+	add [r9].Bullets.count, 1
+
+	call updatePlayer
+	cmp r8, 4
+	jne NO_SHOOT
+	call shootBullets
+NO_SHOOT:
 	add rsp, 40
     ret
 printWorld endp

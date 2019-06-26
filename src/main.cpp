@@ -6,8 +6,16 @@
 #include <stdlib.h>
 #include <cmath>
 
+#pragma pack(push, 1)
+struct Bullets {
+  float x[2];
+  float y[2];
+  float angle[2];
+  int count;
+};
+#pragma pack(pop)
 
-extern "C" float printWorld(float *x, float *y, int dir);
+extern "C" float printWorld(float *x, float *y, int dir, Bullets *bullets);
 
 static struct {
   float x, y;
@@ -88,8 +96,8 @@ int main(void) {
   float x = 250.0f;
   float y = 200.0f;
 
-  //Bullets bullets = {};
-  //bullets.count = 20;
+  Bullets bullets = {};
+  bullets.count = 7;
 
   while (!glfwWindowShouldClose(window)) {
     float ratio;
@@ -106,8 +114,11 @@ int main(void) {
     dir = glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS ? 1 : dir;
     dir = glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS ? 2 : dir;
     dir = glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS ? 3 : dir;
-    float angle = printWorld(&x, &y, dir);
+    dir = glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS ? 4 : dir;
+    printf("bullets address: %p\n", &bullets);
+    float angle = printWorld(&x, &y, dir, &bullets);
     printf("angle: %f\n", angle);
+    printf("count: %d\n", bullets.count);
 
     vertices[0].x = x - 25;
     vertices[1].x = x + 25;
